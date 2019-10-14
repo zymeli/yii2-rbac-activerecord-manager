@@ -1,0 +1,21 @@
+{
+    "name": "zymeli/yii2-rbac-activerecord-manager",
+    "description": "ActiveRecord support for Yii2 application RBAC Manager.",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","RBAC","Manager"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Zyme Li",
+            "email": "710055@qq.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "zymeli\\yii2RbacActiveRecordManager\\": "src"
+        }
+    }
+}
