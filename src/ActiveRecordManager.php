@@ -24,7 +24,7 @@ use zymeli\yii2RbacActiveRecordManager\models\AuthScope;
 class ActiveRecordManager extends BaseManager
 {
     /**
-     * @var false|string the scope. If false then data will check without scope.
+     * @var false|string|callable the scope. If false then data will check without scope.
      */
     public $scope = false;
 
@@ -60,11 +60,11 @@ class ActiveRecordManager extends BaseManager
     public function init()
     {
         parent::init();
+        $this->scope = strval(is_callable($this->scope) ? call_user_func($this->scope) : $this->scope);
         if ($this->scope == '') {
             throw new InvalidConfigException("Scope not found");
-        } else {
-            $this->cacheKey = $this->cacheKey . '_' . $this->scope;
         }
+        $this->cacheKey = $this->cacheKey . '_' . $this->scope;
         if ($this->cache !== null) {
             $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
         }
@@ -291,7 +291,7 @@ class ActiveRecordManager extends BaseManager
     {
         $item->updatedAt = time();
 
-        $authItem = $this->getAuthItemByName($item->name);
+        $authItem = $this->getAuthItemByName($name);
         if ($authItem) {
             $authItem->name = $item->name;
             $authItem->description = $item->description;
@@ -840,7 +840,7 @@ class ActiveRecordManager extends BaseManager
     {
         $authItem = $this->getAuthItemByName($role->name);
         $assignment = new Assignment([
-            'userId' => $userId,
+            'userId' => (string)$userId,
             'roleName' => $role->name,
             'createdAt' => time(),
         ]);
